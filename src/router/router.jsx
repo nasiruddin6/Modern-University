@@ -7,11 +7,14 @@ import Home from "../components/Home";
     {
       path: "/",
       element: <MainLayout></MainLayout>,
-    },
-    {
-      path:'/',
-      element: <Home></Home>
+      children: [
+        {
+          path:'/',
+          element: <Home></Home>
+        }
+      ]
     }
+   
   ]);
 
   export default router;
