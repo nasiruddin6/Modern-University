@@ -32,7 +32,7 @@ const Navbar = () => {
                             {nav}
                         </ul>
                     </div>
-                    <div className='flex gap-2 items-center'>
+                    <div className='hidden md:flex gap-2 items-center'>
                         <img className='w-12' src={icon} alt="" />
                         <h2 className='text-2xl font-bold'>Modern University</h2>
                     </div>

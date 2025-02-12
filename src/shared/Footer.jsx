@@ -1,21 +1,26 @@
 import React from 'react';
 import icon from '../assets/education.png'
+import { IoCreateSharp } from 'react-icons/io5';
 
 const Footer = () => {
     return (
         <footer className="footer footer-center bg-primary text-primary-content p-10">
             <aside>
-             <div>
-                <img 
-                className='w-20'
-                src={icon} alt="" />
-             </div>
+                <div>
+                    <img
+                        className='w-20'
+                        src={icon} alt="" />
+                </div>
                 <p className="font-bold">
                     Modern University Ltd.
                     <br />
                     Providing reliable tech since 1992
                 </p>
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+                <p className='flex items-center'>
+                   <span className='text-xl'> <IoCreateSharp /></span>
+                     MD: NASIR UDDIN
+                </p>
             </aside>
             <nav>
                 <div className="grid grid-flow-col gap-4">
