@@ -19,8 +19,8 @@ const Navbar = () => {
     );
 
     return (
-        <div className="navbar bg-yellow-100 bg-opacity-50 relative">
-            <div className='navbar w-11/12 mx-auto'>
+        <div className="bg-yellow-100 bg-opacity-50 fixed top-0 left-0 w-full z-50 shadow-md">
+            <div className='navbar w-11/12 mx-auto py-3 flex justify-between items-center'>
                 <div className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -33,7 +33,7 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className='hidden md:flex gap-2 items-center'>
-                        <img className='w-12' src={icon} alt="" />
+                        <img className='w-8 text-2xl' src={icon} alt="" />
                         <h2 className='text-2xl font-bold'>Modern University</h2>
                     </div>
                 </div>

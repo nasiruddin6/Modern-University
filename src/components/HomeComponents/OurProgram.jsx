@@ -12,10 +12,12 @@ const OurProgram = () => {
                 </div>
                 <div className='pt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
                     {/* card-one */}
-                    <div className="card card-compact bg-base-100 w-96 shadow-xl">
+                    <div className="card card-compact bg-base-100 w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3
+">
                         <figure>
                             <img
-                                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                                className='w-[390px] h-[310px]'
+                                src="https://i.ibb.co.com/nq40mn3F/arts.jpg"
                                 alt="Shoes" />
                         </figure>
                         <div className="card-body">
@@ -52,16 +54,18 @@ const OurProgram = () => {
                         </div>
                     </div>
                     {/* card-two */}
-                    <div className="card card-compact bg-base-100 w-96 shadow-xl">
+                    <div className="card card-compact bg-base-100 w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3
+">
                         <figure>
                             <img
-                                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                                className='w-[390px] h-[310px]'
+                                src="https://i.ibb.co.com/Q3sVtd38/books.jpg"
                                 alt="Shoes" />
                         </figure>
                         <div className="card-body">
                             <p>June 3, 2018</p>
-                            <h2 className="card-title">Arts Programs!</h2>
-                            <p className='text-green-400'>Charles Banks</p>
+                            <h2 className="card-title">Foreign Language Programs!</h2>
+                            <p className='text-green-400'>Maria Howard</p>
                             <div className="card-actions space-x-3">
 
                                 {/* Icon 1 */}
@@ -92,16 +96,17 @@ const OurProgram = () => {
                         </div>
                     </div>
                     {/* card-three */}
-                    <div className="card card-compact bg-base-100 w-96 shadow-xl">
+                    <div className="card card-compact bg-base-100 w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3">
                         <figure>
                             <img
-                                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                                className='w-[390px] h-[310px]'
+                                src="https://i.ibb.co.com/zT8vfZkX/spots5494.jpg"
                                 alt="Shoes" />
                         </figure>
                         <div className="card-body">
                             <p>June 3, 2018</p>
-                            <h2 className="card-title">Arts Programs!</h2>
-                            <p className='text-green-400'>Charles Banks</p>
+                            <h2 className="card-title">Sports Programs!</h2>
+                            <p className='text-green-400'>Steven Carter</p>
                             <div className="card-actions space-x-3">
 
                                 {/* Icon 1 */}

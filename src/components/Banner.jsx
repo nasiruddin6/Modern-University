@@ -2,7 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import AOS from "aos";
+// import AOS from "aos";
 import { Navigation, Autoplay } from "swiper/modules";
 
 const Banner = () => {
@@ -12,7 +12,7 @@ const Banner = () => {
       autoplay={{ delay: 50000 }}
       loop={true}
       modules={[Navigation, Autoplay]}
-      className="h-[80vh] w-full"
+      className="h-[80vh] w-full mt-20"
     >
      
      {/* slide  */}
