@@ -7,7 +7,7 @@ import { MdPeopleAlt } from 'react-icons/md';
 
 const ChooseUs = () => {
     return (
-        <div className='w-11/12 mx-auto mt-10 mb-10 flex flex-col md:flex-row items-center justify-center'>
+        <div className='w-11/12 mx-auto  mt-10 mb-10 flex flex-col md:flex-row items-center justify-center'>
             {/* section-1 */}
             <section className='w-full md:w-6/12 flex flex-col items-center text-center md:text-left'>
                 <div className='space-y-5 w-full md:w-10/12'>
