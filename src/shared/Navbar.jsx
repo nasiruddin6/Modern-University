@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, X } from 'lucide-react';
 import icon from '../assets/education.png';
+import { filterSearchResults } from '../data/searchIndex';
 
 const megaMenus = {
   academics: {
@@ -108,7 +109,7 @@ const HamburgerButton = ({ open, onClick, light }) => (
   </button>
 );
 
-const MegaDropdown = ({ menu, isOpen, onOpen, onClose, scrolled }) => (
+const MegaDropdown = ({ menu, isOpen, onOpen, onClose, solidNav }) => (
   <div
     className="relative"
     onMouseEnter={onOpen}
@@ -117,8 +118,8 @@ const MegaDropdown = ({ menu, isOpen, onOpen, onClose, scrolled }) => (
     <button
       type="button"
       className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300 ${
-        scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
-      } ${isOpen ? (scrolled ? 'text-emerald-600' : 'text-white') : ''}`}
+        solidNav ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+      } ${isOpen ? (solidNav ? 'text-emerald-600' : 'text-white') : ''}`}
       aria-expanded={isOpen}
       aria-haspopup="true"
     >
@@ -167,12 +168,54 @@ const MegaDropdown = ({ menu, isOpen, onOpen, onClose, scrolled }) => (
 );
 
 const Navbar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchInputRef = useRef(null);
+  const isHome = location.pathname === '/';
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState(null);
   const [mobileAccordion, setMobileAccordion] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const searchResults = useMemo(
+    () => filterSearchResults(searchQuery),
+    [searchQuery]
+  );
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearchQuery('');
+  };
+
+  const openSearch = () => {
+    setMobileOpen(false);
+    setSearchOpen(true);
+  };
+
+  const handleSearchSelect = (path) => {
+    navigate(path);
+    closeSearch();
+    closeMobile();
+  };
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closeSearch();
+    };
+    if (searchOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [searchOpen]);
 
   useEffect(() => {
     let ticking = false;
@@ -192,6 +235,13 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    setMobileOpen(false);
+    closeSearch();
+    setActiveMega(null);
+    setScrolled(window.scrollY > 24);
+  }, [location.pathname]);
+
+  useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
@@ -203,14 +253,13 @@ const Navbar = () => {
     setMobileAccordion(null);
   };
 
-  const lightText = !scrolled && !mobileOpen;
+  const solidNav = scrolled || mobileOpen || !isHome;
+  const lightText = isHome && !scrolled && !mobileOpen;
 
   return (
     <header
       className={`fixed left-0 top-0 z-50 w-full transition-[background-color,box-shadow] duration-300 ease-out ${
-        scrolled || mobileOpen
-          ? 'bg-white shadow-md'
-          : 'bg-transparent'
+        solidNav ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
     >
       <nav className="mx-auto flex w-11/12 max-w-7xl items-center justify-between py-4">
@@ -233,8 +282,8 @@ const Navbar = () => {
             className={({ isActive }) =>
               `px-3 py-2 text-sm font-medium transition-colors duration-300 ${
                 isActive
-                  ? scrolled ? 'text-emerald-600' : 'text-white'
-                  : scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+                  ? solidNav ? 'text-emerald-600' : 'text-white'
+                  : solidNav ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
               }`
             }
           >
@@ -248,7 +297,7 @@ const Navbar = () => {
               isOpen={activeMega === key}
               onOpen={() => setActiveMega(key)}
               onClose={() => setActiveMega(null)}
-              scrolled={scrolled}
+              solidNav={solidNav}
             />
           ))}
 
@@ -259,8 +308,8 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `px-3 py-2 text-sm font-medium transition-colors duration-300 ${
                   isActive
-                    ? scrolled ? 'text-emerald-600' : 'text-white'
-                    : scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+                    ? solidNav ? 'text-emerald-600' : 'text-white'
+                    : solidNav ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
                 }`
               }
             >
@@ -273,19 +322,19 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setSearchOpen((prev) => !prev)}
-            className={`hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 sm:flex ${
+            onClick={() => (searchOpen ? closeSearch() : openSearch())}
+            className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
               lightText
                 ? 'text-white/90 hover:bg-white/10'
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
             <Search size={18} />
-            Search
+            <span className="hidden sm:inline">Search</span>
           </button>
 
-          <button
-            type="button"
+          <Link
+            to="/admissions/apply"
             className={`hidden rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 lg:block ${
               lightText
                 ? 'bg-white text-emerald-700 hover:bg-emerald-50'
@@ -293,7 +342,7 @@ const Navbar = () => {
             }`}
           >
             Apply Now
-          </button>
+          </Link>
 
           <HamburgerButton
             open={mobileOpen}
@@ -306,30 +355,68 @@ const Navbar = () => {
       {/* Search panel */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          searchOpen ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
+          searchOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="border-t border-gray-100 bg-white px-4 pb-4">
-          <div className="mx-auto flex w-11/12 max-w-2xl items-center gap-3">
-            <Search size={18} className="shrink-0 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search programs, news, events..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border-0 bg-transparent py-2 text-sm text-gray-800 outline-none placeholder:text-gray-400"
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setSearchOpen(false);
-                setSearchQuery('');
-              }}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X size={20} />
-            </button>
-          </div>
+          <form
+            className="mx-auto w-11/12 max-w-2xl"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (searchResults.length > 0) {
+                handleSearchSelect(searchResults[0].path);
+              }
+            }}
+          >
+            <div className="flex items-center gap-3 border-b border-gray-100 py-2">
+              <Search size={18} className="shrink-0 text-gray-400" />
+              <input
+                ref={searchInputRef}
+                type="search"
+                placeholder="Search programs, news, events, admissions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full border-0 bg-transparent py-2 text-sm text-gray-800 outline-none placeholder:text-gray-400"
+              />
+              <button
+                type="button"
+                onClick={closeSearch}
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Close search"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {searchQuery.trim() && (
+              <div className="mt-2 max-h-64 overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-lg">
+                {searchResults.length > 0 ? (
+                  <ul>
+                    {searchResults.map((result) => (
+                      <li key={`${result.path}-${result.title}`}>
+                        <button
+                          type="button"
+                          onClick={() => handleSearchSelect(result.path)}
+                          className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-emerald-50"
+                        >
+                          <span className="text-sm font-medium text-gray-800">
+                            {result.title}
+                          </span>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+                            {result.category}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="px-4 py-6 text-center text-sm text-gray-500">
+                    No results found for &ldquo;{searchQuery}&rdquo;
+                  </p>
+                )}
+              </div>
+            )}
+          </form>
         </div>
       </div>
 
@@ -419,17 +506,18 @@ const Navbar = () => {
           <button
             type="button"
             className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700"
-            onClick={() => setSearchOpen(true)}
+            onClick={openSearch}
           >
             <Search size={18} />
             Search
           </button>
-          <button
-            type="button"
-            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
+          <Link
+            to="/admissions/apply"
+            onClick={closeMobile}
+            className="flex w-full items-center justify-center rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
           >
             Apply Now
-          </button>
+          </Link>
         </div>
       </div>
     </header>

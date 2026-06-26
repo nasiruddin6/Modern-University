@@ -1,90 +1,203 @@
 import React from 'react';
-import icon from '../assets/education.png'
-import { IoCreateSharp } from 'react-icons/io5';
-import { IoIosCreate } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  Youtube,
+} from 'lucide-react';
+import icon from '../assets/education.png';
+
+const footerLinks = {
+  quick: [
+    { label: 'Home', path: '/' },
+    { label: 'About Us', path: '/' },
+    { label: 'Programs', path: '/programs' },
+    { label: 'Events', path: '/events' },
+    { label: 'News', path: '/news' },
+  ],
+  academics: [
+    { label: 'All Programs', path: '/programs' },
+    { label: 'Departments', path: '/' },
+    { label: 'Faculty', path: '/' },
+    { label: 'Academic Calendar', path: '/events' },
+    { label: 'Library', path: '/' },
+  ],
+  admissions: [
+    { label: 'How to Apply', path: '/programs' },
+    { label: 'Scholarships', path: '/news' },
+    { label: 'Tuition & Fees', path: '/programs' },
+    { label: 'International Students', path: '/news' },
+    { label: 'Campus Tour', path: '/' },
+  ],
+};
+
+const socialLinks = [
+  { label: 'Facebook', icon: Facebook, href: 'https://facebook.com' },
+  { label: 'Twitter', icon: Twitter, href: 'https://twitter.com' },
+  { label: 'YouTube', icon: Youtube, href: 'https://youtube.com' },
+  { label: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com' },
+  { label: 'Instagram', icon: Instagram, href: 'https://instagram.com' },
+];
 
 const Footer = () => {
-    return (
-        <div>
-            <footer className="footer bg-base-200 text-base-content p-10">
-                <nav>
-                    <h6 className="footer-title">Services</h6>
-                    <a className="link link-hover">Branding</a>
-                    <a className="link link-hover">Design</a>
-                    <a className="link link-hover">Marketing</a>
-                    <a className="link link-hover">Advertisement</a>
-                </nav>
-                <nav>
-                    <h6 className="footer-title">Company</h6>
-                    <a className="link link-hover">About us</a>
-                    <a className="link link-hover">Contact</a>
-                    <a className="link link-hover">Jobs</a>
-                    <a className="link link-hover">Press kit</a>
-                </nav>
-                <nav>
-                    <h6 className="footer-title">Legal</h6>
-                    <a className="link link-hover">Terms of use</a>
-                    <a className="link link-hover">Privacy policy</a>
-                    <a className="link link-hover">Cookie policy</a>
-                </nav>
-            </footer>
-            <footer className="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
-                <aside className="grid-flow-col items-center">
-                  <div>
-                   <img
-                   className='w-10'
-                    src={icon} alt="" />
-                  </div>
-                    <p>
-                        MODERN UNIVERSITY LTD.
-                        <br />
-                        Providing reliable tech since 1992
-                    </p>
-                    <br />
-                </aside>
-                <nav className="md:place-self-center md:justify-self-end">
-                    <div className="grid grid-flow-col gap-4">
-                    <p className='flex items-center'><span className='text-xl'><IoIosCreate /></span>𝓜𝓓 𝓝𝓐𝓢𝓘𝓡 𝓤𝓓𝓓𝓘𝓝</p>
+  return (
+    <footer className="bg-slate-900 text-gray-300">
+      {/* Main footer */}
+      <div className="mx-auto w-11/12 max-w-7xl py-14 sm:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          {/* Brand */}
+          <div className="lg:col-span-4">
+            <Link to="/" className="inline-flex items-center gap-3">
+              <img className="h-10 w-10" src={icon} alt="Modern University" />
+              <span className="text-xl font-bold text-white">Modern University</span>
+            </Link>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-gray-400">
+              A premier academic institution dedicated to excellence in education,
+              research, and innovation — shaping leaders since 1992.
+            </p>
 
-                        <a>
-                            
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                className="fill-current">
-                                <path
-                                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                            </svg>
-                        </a>
-                        <a>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                className="fill-current">
-                                <path
-                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-                            </svg>
-                        </a>
-                        <a>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                className="fill-current">
-                                <path
-                                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </nav>
-            </footer>
+            <div className="mt-6 space-y-3 text-sm">
+              <p className="flex items-start gap-3">
+                <MapPin size={18} className="mt-0.5 shrink-0 text-emerald-400" />
+                123 University Avenue, Dhaka 1200, Bangladesh
+              </p>
+              <p className="flex items-center gap-3">
+                <Phone size={18} className="shrink-0 text-emerald-400" />
+                +880 1234-567890
+              </p>
+              <p className="flex items-center gap-3">
+                <Mail size={18} className="shrink-0 text-emerald-400" />
+                info@modernuniversity.edu
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="lg:col-span-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+              Quick Links
+            </h3>
+            <ul className="space-y-2.5">
+              {footerLinks.quick.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.path}
+                    className="text-sm text-gray-400 transition-colors hover:text-emerald-400"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Academics */}
+          <div className="lg:col-span-3">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+              Academics
+            </h3>
+            <ul className="space-y-2.5">
+              {footerLinks.academics.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.path}
+                    className="text-sm text-gray-400 transition-colors hover:text-emerald-400"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Admissions */}
+          <div className="lg:col-span-3">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+              Admissions
+            </h3>
+            <ul className="space-y-2.5">
+              {footerLinks.admissions.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.path}
+                    className="text-sm text-gray-400 transition-colors hover:text-emerald-400"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-    );
+
+        {/* Newsletter */}
+        <div className="mt-12 rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-white">Stay Connected</h3>
+              <p className="mt-1 text-sm text-gray-400">
+                Subscribe for campus news, events, and admission updates.
+              </p>
+            </div>
+            <form
+              className="flex w-full max-w-md gap-2"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 rounded-lg border border-white/10 bg-slate-800 px-4 py-2.5 text-sm text-white outline-none placeholder:text-gray-500 focus:border-emerald-500"
+              />
+              <button
+                type="submit"
+                className="shrink-0 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex w-11/12 max-w-7xl flex-col items-center justify-between gap-4 py-6 sm:flex-row">
+          <p className="text-center text-sm text-gray-500 sm:text-left">
+            © {new Date().getFullYear()} Modern University Ltd. All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-3">
+            {socialLinks.map(({ label, icon: Icon, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-gray-400 transition-colors hover:bg-emerald-600 hover:text-white"
+              >
+                <Icon size={16} />
+              </a>
+            ))}
+          </div>
+
+          <div className="flex gap-4 text-sm text-gray-500">
+            <Link to="/" className="hover:text-emerald-400">
+              Privacy Policy
+            </Link>
+            <Link to="/" className="hover:text-emerald-400">
+              Terms of Use
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

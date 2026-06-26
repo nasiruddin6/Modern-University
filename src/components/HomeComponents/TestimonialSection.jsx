@@ -113,7 +113,7 @@ const TestimonialSection = () => {
   const [sectionRef, inView] = useInView();
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-20">
+    <section ref={sectionRef} className="bg-white py-16 sm:py-20">
       <div className="mx-auto w-11/12 max-w-7xl">
         <div className="mb-12 text-center" data-aos="fade-up">
           <p className="text-sm font-semibold uppercase tracking-widest text-emerald-600">

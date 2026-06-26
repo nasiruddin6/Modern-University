@@ -4,6 +4,13 @@ import {
 import MainLayout from "../layout/MainLayout";
 import Home from "../components/Home";
 import AllPrograms from "../pages/AllPrograms";
+import EventCalendar from "../pages/EventCalendar";
+import AllNews from "../pages/AllNews";
+import Campus from "../pages/Campus";
+import Contact from "../pages/Contact";
+import AdmissionPage from "../pages/AdmissionPage";
+import AcademicPage from "../pages/AcademicPage";
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -16,6 +23,42 @@ import AllPrograms from "../pages/AllPrograms";
         {
           path: '/programs',
           element: <AllPrograms />
+        },
+        {
+          path: '/events',
+          element: <EventCalendar />
+        },
+        {
+          path: '/news',
+          element: <AllNews />
+        },
+        {
+          path: '/campus',
+          element: <Campus />
+        },
+        {
+          path: '/contacts',
+          element: <Contact />
+        },
+        {
+          path: '/scholarships',
+          element: <AdmissionPage pageKey="scholarships" />
+        },
+        {
+          path: '/admissions/:slug',
+          element: <AdmissionPage />
+        },
+        {
+          path: '/programs/:slug',
+          element: <AcademicPage />
+        },
+        {
+          path: '/faculties/:slug',
+          element: <AcademicPage />
+        },
+        {
+          path: '/academics/:slug',
+          element: <AcademicPage />
         }
       ]
     }

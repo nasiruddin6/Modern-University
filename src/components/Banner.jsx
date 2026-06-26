@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -16,7 +17,9 @@ const slides = [
     subtitle:
       'Any prominent career starts with good education. Together with us, you will have an opportunity of getting better and deeper knowledge of the subjects that can build your future.',
     primaryBtn: 'Sign Up for Excursion',
+    primaryLink: '/admissions/open-days',
     secondaryBtn: 'Learn More',
+    secondaryLink: '/campus',
     titleClass: 'text-center text-4xl sm:text-5xl lg:text-6xl font-bold',
   },
   {
@@ -26,7 +29,9 @@ const slides = [
     subtitle:
       'Discover world-class facilities, vibrant student life, and a diverse community dedicated to academic excellence.',
     primaryBtn: 'Visit Now',
+    primaryLink: '/campus',
     secondaryBtn: 'Get Started',
+    secondaryLink: '/admissions/apply',
     titleClass: 'text-4xl sm:text-5xl font-bold',
   },
   {
@@ -36,7 +41,9 @@ const slides = [
     subtitle:
       'Join thousands of students pursuing degrees across engineering, business, law, and the arts.',
     primaryBtn: 'View Programs',
+    primaryLink: '/programs',
     secondaryBtn: 'Apply Now',
+    secondaryLink: '/admissions/apply',
     titleClass: 'text-4xl sm:text-5xl font-bold',
   },
 ];
@@ -86,22 +93,22 @@ const Banner = () => {
                   {slide.subtitle}
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-4">
-                  <button
-                    type="button"
+                  <Link
+                    to={slide.primaryLink}
                     className={`rounded-lg bg-black/80 px-6 py-2 text-white transition-all duration-500 delay-200 hover:bg-emerald-600 ${
                       loaded ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
                     }`}
                   >
                     {slide.primaryBtn}
-                  </button>
-                  <button
-                    type="button"
+                  </Link>
+                  <Link
+                    to={slide.secondaryLink}
                     className={`rounded-lg bg-emerald-600 px-6 py-2 text-white transition-all duration-500 delay-300 hover:bg-emerald-700 ${
                       loaded ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
                     }`}
                   >
                     {slide.secondaryBtn}
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
