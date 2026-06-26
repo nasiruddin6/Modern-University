@@ -1,60 +1,47 @@
 import React from 'react';
-import { FaLaptop, FaStar } from 'react-icons/fa6';
-import { GiSandsOfTime } from 'react-icons/gi';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import ProgramCard from '../ProgramCard';
+import { featuredPrograms } from '../../data/programs';
 
 const OurProgram = () => {
-    return (
-        <div className='bg-[url(https://i.ibb.co/hJBMCv52/bg.png)] h-auto md:h-[900px] bg-cover bg-center bg-no-repeat'>
-            <div className='w-11/12 mx-auto'>
-                <div className='text-center text-white items-center justify-center pt-20'>
-                    <h2 className='text-4xl md:text-6xl font-bold'>Our Program</h2>
-                    <p className='pt-6 md:pt-10 pb-5 text-lg md:text-xl'>
-                        Our Featured Programs are selected through a rigorous process and uniquely created for each semester.
-                    </p>
-                </div>
-                <div className='pt-10 md:pt-20 grid grid-cols-1  md:grid-cols-3 gap-6'>
-                    {/* card-one */}
-                    <div className="card card-compact bg-base-100 w-full md:w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3">
-                        <figure>
-                            <img className='w-full h-[250px] md:h-[310px] object-cover' src="https://i.ibb.co/nq40mn3F/arts.jpg" alt="Arts Program" />
-                        </figure>
-                        <div className="card-body">
-                            <p>June 3, 2018</p>
-                            <h2 className="card-title">Arts Programs!</h2>
-                            <p className='text-green-400'>Charles Banks</p>
-                        </div>
-                    </div>
+  return (
+    <section className="relative overflow-hidden bg-slate-900 py-16 sm:py-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.15),_transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
 
-                    {/* card-two */}
-                    <div className="card card-compact bg-base-100 w-full md:w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3">
-                        <figure>
-                            <img className='w-full h-[250px] md:h-[310px] object-cover' src="https://i.ibb.co/Q3sVtd38/books.jpg" alt="Language Program" />
-                        </figure>
-                        <div className="card-body">
-                            <p>June 3, 2018</p>
-                            <h2 className="card-title">Foreign Language Programs!</h2>
-                            <p className='text-green-400'>Maria Howard</p>
-                        </div>
-                    </div>
-
-                    {/* card-three */}
-                    <div className="card card-compact bg-base-100 w-full md:w-96 shadow-xl transition-transform duration-300 hover:-translate-y-3">
-                        <figure>
-                            <img className='w-full h-[250px] md:h-[310px] object-cover' src="https://i.ibb.co/zT8vfZkX/spots5494.jpg" alt="Sports Program" />
-                        </figure>
-                        <div className="card-body">
-                            <p>June 3, 2018</p>
-                            <h2 className="card-title">Sports Programs!</h2>
-                            <p className='text-green-400'>Steven Carter</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className='flex justify-center pt-14 pb-10'>
-                <button className="btn rounded-full w-48 md:w-52 bg-green-500 text-white">View All Programs</button>
-            </div>
+      <div className="relative mx-auto w-11/12 max-w-7xl">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-emerald-400">
+            Academics
+          </p>
+          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+            Our Programs
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base text-gray-300 sm:text-lg">
+            Featured programs selected through a rigorous process and uniquely
+            designed for each semester to prepare students for global careers.
+          </p>
         </div>
-    );
+
+        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {featuredPrograms.map((program) => (
+            <ProgramCard key={program.id} program={program} variant="dark" />
+          ))}
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <Link
+            to="/programs"
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+          >
+            View All Programs
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default OurProgram;

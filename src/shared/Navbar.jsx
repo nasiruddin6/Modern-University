@@ -1,128 +1,439 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ChevronDown, Search, X } from 'lucide-react';
 import icon from '../assets/education.png';
-import { CiSearch } from 'react-icons/ci';
-import { X } from 'lucide-react';
 
-const globalData = [
-    // Navbar Links
-    { name: "Home", path: "/" },
-    { name: "Elements", path: "/elements" },
-    { name: "Pages", path: "/pages" },
-    { name: "News", path: "/news" },
-    { name: "Campus", path: "/campus" },
-    { name: "Contacts", path: "/contacts" },
-    { name: "Developer List", path: "/developList" },
+const megaMenus = {
+  academics: {
+    label: 'Academics',
+    description: 'World-class programs designed to shape tomorrow\'s leaders.',
+    columns: [
+      {
+        title: 'Programs',
+        links: [
+          { name: 'Undergraduate', path: '/programs/undergraduate' },
+          { name: 'Graduate', path: '/programs/graduate' },
+          { name: 'Doctoral Studies', path: '/programs/doctoral' },
+          { name: 'Online Learning', path: '/programs/online' },
+        ],
+      },
+      {
+        title: 'Faculties',
+        links: [
+          { name: 'Engineering', path: '/faculties/engineering' },
+          { name: 'Business', path: '/faculties/business' },
+          { name: 'Arts & Sciences', path: '/faculties/arts' },
+          { name: 'Medicine', path: '/faculties/medicine' },
+        ],
+      },
+      {
+        title: 'Resources',
+        links: [
+          { name: 'Academic Calendar', path: '/academics/calendar' },
+          { name: 'Library', path: '/academics/library' },
+          { name: 'Research Centers', path: '/academics/research' },
+          { name: 'Student Support', path: '/academics/support' },
+        ],
+      },
+    ],
+  },
+  admissions: {
+    label: 'Admissions',
+    description: 'Start your journey — we\'re here to guide every step.',
+    columns: [
+      {
+        title: 'Apply',
+        links: [
+          { name: 'How to Apply', path: '/admissions/apply' },
+          { name: 'Requirements', path: '/admissions/requirements' },
+          { name: 'Deadlines', path: '/admissions/deadlines' },
+          { name: 'Transfer Students', path: '/admissions/transfer' },
+        ],
+      },
+      {
+        title: 'Financing',
+        links: [
+          { name: 'Tuition & Fees', path: '/admissions/tuition' },
+          { name: 'Scholarships', path: '/scholarships' },
+          { name: 'Financial Aid', path: '/admissions/financial-aid' },
+          { name: 'Payment Plans', path: '/admissions/payment' },
+        ],
+      },
+      {
+        title: 'Visit',
+        links: [
+          { name: 'Campus Tours', path: '/campus' },
+          { name: 'Open Days', path: '/admissions/open-days' },
+          { name: 'International Students', path: '/admissions/international' },
+          { name: 'Contact Admissions', path: '/contacts' },
+        ],
+      },
+    ],
+  },
+};
 
-    // Other Sections Data (এইখানে ওয়েবসাইটের অন্যান্য ডাটা রাখো)
-    { name: "Latest News - University Ranked Top", path: "/news" },
-    { name: "Modern University Campus", path: "/campus" },
-    { name: "New Courses Added for 2025", path: "/courses" },
-    { name: "Best Teachers in our Faculty", path: "/faculty" },
-    { name: "Scholarship Opportunities", path: "/scholarships" },
-    { name: "Upcoming Events and Seminars", path: "/events" },
+const navLinks = [
+  { name: 'Home', path: '/' },
+  { name: 'Campus', path: '/campus' },
+  { name: 'News', path: '/news' },
+  { name: 'Contact', path: '/contacts' },
 ];
 
-const Navbar = () => {
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredItems, setFilteredItems] = useState([]);
+const HamburgerButton = ({ open, onClick, light }) => (
+  <button
+    type="button"
+    aria-label={open ? 'Close menu' : 'Open menu'}
+    aria-expanded={open}
+    onClick={onClick}
+    className="relative z-50 flex h-10 w-10 items-center justify-center lg:hidden"
+  >
+    <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
+    <span className="relative block h-5 w-6">
+      <span
+        className={`absolute left-0 top-0 block h-0.5 w-6 rounded-full transition-all duration-300 ease-in-out ${
+          light ? 'bg-white' : 'bg-gray-800'
+        } ${open ? 'top-2 rotate-45' : ''}`}
+      />
+      <span
+        className={`absolute left-0 top-2 block h-0.5 w-6 rounded-full transition-all duration-300 ease-in-out ${
+          light ? 'bg-white' : 'bg-gray-800'
+        } ${open ? 'opacity-0' : 'opacity-100'}`}
+      />
+      <span
+        className={`absolute left-0 top-4 block h-0.5 w-6 rounded-full transition-all duration-300 ease-in-out ${
+          light ? 'bg-white' : 'bg-gray-800'
+        } ${open ? 'top-2 -rotate-45' : ''}`}
+      />
+    </span>
+  </button>
+);
 
-    // Search Functionality (Navbar + Other Sections)
-    const handleSearch = (query) => {
-        setSearchQuery(query);
-        if (query.trim() === "") {
-            setFilteredItems([]); 
-        } else {
-            const filtered = globalData.filter(item =>
-                item.name.toLowerCase().includes(query.toLowerCase())
-            );
-            setFilteredItems(filtered);
-        }
+const MegaDropdown = ({ menu, isOpen, onOpen, onClose, scrolled }) => (
+  <div
+    className="relative"
+    onMouseEnter={onOpen}
+    onMouseLeave={onClose}
+  >
+    <button
+      type="button"
+      className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300 ${
+        scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+      } ${isOpen ? (scrolled ? 'text-emerald-600' : 'text-white') : ''}`}
+      aria-expanded={isOpen}
+      aria-haspopup="true"
+    >
+      {menu.label}
+      <ChevronDown
+        size={16}
+        className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+      />
+    </button>
+
+    <div
+      className={`absolute left-1/2 top-full z-50 w-[min(90vw,56rem)] -translate-x-1/2 pt-4 transition-all duration-300 ${
+        isOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+      }`}
+    >
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
+        <div className="border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-white px-8 py-6">
+          <h3 className="text-lg font-semibold text-gray-900">{menu.label}</h3>
+          <p className="mt-1 text-sm text-gray-500">{menu.description}</p>
+        </div>
+        <div className="grid gap-8 p-8 sm:grid-cols-2 lg:grid-cols-3">
+          {menu.columns.map((column) => (
+            <div key={column.title}>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                {column.title}
+              </p>
+              <ul className="space-y-2">
+                {column.links.map((link) => (
+                  <li key={link.path}>
+                    <NavLink
+                      to={link.path}
+                      className="block rounded-lg px-2 py-1.5 text-sm text-gray-600 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                      onClick={onClose}
+                    >
+                      {link.name}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMega, setActiveMega] = useState(null);
+  const [mobileAccordion, setMobileAccordion] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24);
+        ticking = false;
+      });
     };
 
-    return (
-        <div className="bg-yellow-100 bg-opacity-50 fixed top-0 left-0 w-full z-50 shadow-md">
-            <div className='navbar w-11/12 mx-auto py-3 flex justify-between items-center'>
-                <div className="navbar-start">
-                    <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
-                            </svg>
-                        </div>
-                        <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-94 p-2 shadow">
-                            {globalData.slice(0, 7).map((item) => (
-                                <li key={item.path}>
-                                    <NavLink to={item.path}>{item.name}</NavLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='hidden md:flex gap-2 items-center'>
-                        <img className='w-8 text-2xl' src={icon} alt="" />
-                        <h2 className='text-2xl font-bold'>Modern University</h2>
-                    </div>
-                </div>
-                <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
-                        {globalData.slice(0, 7).map((item) => (
-                            <li key={item.path}>
-                                <NavLink to={item.path}>{item.name}</NavLink>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="navbar-end">
-                    <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="text-2xl flex items-center gap-1">
-                        <CiSearch /> Search
-                    </button>
-                </div>
-            </div>
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-            {/* Search Bar */}
-            {isSearchOpen && (
-                <div className="absolute top-2 right-48 bg-white shadow-lg p-3 rounded-lg w-64">
-                    <div className="flex justify-between items-center">
-                        <input
-                            type="text"
-                            placeholder="Search here..."
-                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                            value={searchQuery}
-                            onChange={(e) => handleSearch(e.target.value)}
-                        />
-                        <button onClick={() => {
-                            setIsSearchOpen(false);
-                            setSearchQuery("");
-                            setFilteredItems([]);
-                        }} className="ml-2 text-gray-500 hover:text-gray-700">
-                            <X size={24} />
-                        </button>
-                    </div>
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
 
-                    {/* Search Results */}
-                    {searchQuery && (
-                        <div className="mt-2 bg-white shadow-lg rounded-md max-h-40 overflow-y-auto">
-                            {filteredItems.length > 0 ? (
-                                filteredItems.map((item) => (
-                                    <NavLink
-                                        key={item.path}
-                                        to={item.path}
-                                        className="block px-4 py-2 hover:bg-gray-200"
-                                        onClick={() => setIsSearchOpen(false)}
-                                    >
-                                        {item.name}
-                                    </NavLink>
-                                ))
-                            ) : (
-                                <p className="px-4 py-2 text-gray-500">No results found</p>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setMobileAccordion(null);
+  };
+
+  const lightText = !scrolled && !mobileOpen;
+
+  return (
+    <header
+      className={`fixed left-0 top-0 z-50 w-full transition-[background-color,box-shadow] duration-300 ease-out ${
+        scrolled || mobileOpen
+          ? 'bg-white shadow-md'
+          : 'bg-transparent'
+      }`}
+    >
+      <nav className="mx-auto flex w-11/12 max-w-7xl items-center justify-between py-4">
+        {/* Logo */}
+        <NavLink to="/" className="flex items-center gap-2" onClick={closeMobile}>
+          <img className="h-9 w-9" src={icon} alt="Modern University" />
+          <span
+            className={`text-xl font-bold transition-colors duration-300 ${
+              lightText ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            Modern University
+          </span>
+        </NavLink>
+
+        {/* Desktop nav */}
+        <div className="hidden items-center gap-1 lg:flex">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `px-3 py-2 text-sm font-medium transition-colors duration-300 ${
+                isActive
+                  ? scrolled ? 'text-emerald-600' : 'text-white'
+                  : scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+              }`
+            }
+          >
+            Home
+          </NavLink>
+
+          {Object.entries(megaMenus).map(([key, menu]) => (
+            <MegaDropdown
+              key={key}
+              menu={menu}
+              isOpen={activeMega === key}
+              onOpen={() => setActiveMega(key)}
+              onClose={() => setActiveMega(null)}
+              scrolled={scrolled}
+            />
+          ))}
+
+          {navLinks.slice(1).map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `px-3 py-2 text-sm font-medium transition-colors duration-300 ${
+                  isActive
+                    ? scrolled ? 'text-emerald-600' : 'text-white'
+                    : scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-white/90 hover:text-white'
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
         </div>
-    );
+
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSearchOpen((prev) => !prev)}
+            className={`hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 sm:flex ${
+              lightText
+                ? 'text-white/90 hover:bg-white/10'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <Search size={18} />
+            Search
+          </button>
+
+          <button
+            type="button"
+            className={`hidden rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 lg:block ${
+              lightText
+                ? 'bg-white text-emerald-700 hover:bg-emerald-50'
+                : 'bg-emerald-600 text-white hover:bg-emerald-700'
+            }`}
+          >
+            Apply Now
+          </button>
+
+          <HamburgerButton
+            open={mobileOpen}
+            onClick={() => setMobileOpen((prev) => !prev)}
+            light={lightText}
+          />
+        </div>
+      </nav>
+
+      {/* Search panel */}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          searchOpen ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="border-t border-gray-100 bg-white px-4 pb-4">
+          <div className="mx-auto flex w-11/12 max-w-2xl items-center gap-3">
+            <Search size={18} className="shrink-0 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search programs, news, events..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full border-0 bg-transparent py-2 text-sm text-gray-800 outline-none placeholder:text-gray-400"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setSearchOpen(false);
+                setSearchQuery('');
+              }}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        className={`fixed inset-0 top-[72px] z-40 bg-black/40 transition-opacity duration-300 lg:hidden ${
+          mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={closeMobile}
+        aria-hidden={!mobileOpen}
+      />
+      <div
+        className={`fixed right-0 top-[72px] z-40 flex h-[calc(100vh-72px)] w-full max-w-sm flex-col overflow-y-auto bg-white shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
+          mobileOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col gap-1 p-4">
+          <NavLink
+            to="/"
+            onClick={closeMobile}
+            className="rounded-xl px-4 py-3 text-base font-medium text-gray-800 hover:bg-emerald-50 hover:text-emerald-700"
+          >
+            Home
+          </NavLink>
+
+          {Object.entries(megaMenus).map(([key, menu]) => (
+            <div key={key} className="overflow-hidden rounded-xl">
+              <button
+                type="button"
+                onClick={() => setMobileAccordion((prev) => (prev === key ? null : key))}
+                className="flex w-full items-center justify-between px-4 py-3 text-base font-medium text-gray-800 hover:bg-emerald-50"
+              >
+                {menu.label}
+                <ChevronDown
+                  size={18}
+                  className={`transition-transform duration-300 ${
+                    mobileAccordion === key ? 'rotate-180 text-emerald-600' : 'text-gray-400'
+                  }`}
+                />
+              </button>
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${
+                  mobileAccordion === key ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="space-y-4 px-4 pb-4">
+                    {menu.columns.map((column) => (
+                      <div key={column.title}>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                          {column.title}
+                        </p>
+                        <ul className="space-y-1">
+                          {column.links.map((link) => (
+                            <li key={link.path}>
+                              <NavLink
+                                to={link.path}
+                                onClick={closeMobile}
+                                className="block rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"
+                              >
+                                {link.name}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {navLinks.slice(1).map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              onClick={closeMobile}
+              className="rounded-xl px-4 py-3 text-base font-medium text-gray-800 hover:bg-emerald-50 hover:text-emerald-700"
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="mt-auto border-t border-gray-100 p-4">
+          <button
+            type="button"
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700"
+            onClick={() => setSearchOpen(true)}
+          >
+            <Search size={18} />
+            Search
+          </button>
+          <button
+            type="button"
+            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
+          >
+            Apply Now
+          </button>
+        </div>
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;

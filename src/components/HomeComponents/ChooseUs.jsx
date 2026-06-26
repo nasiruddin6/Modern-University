@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CountUp from 'react-countup';
 import { FaGraduationCap, FaRegBuilding } from 'react-icons/fa6';
 import groupImg from '../../assets/business-people-meeting.jpg';
@@ -6,8 +6,29 @@ import { BsBagCheckFill } from 'react-icons/bs';
 import { MdPeopleAlt } from 'react-icons/md';
 
 const ChooseUs = () => {
+    const sectionRef = useRef(null);
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => {
+        const node = sectionRef.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setAnimate(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.2 }
+        );
+
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className='w-11/12 mx-auto  mt-10 mb-10 flex flex-col md:flex-row items-center justify-center'>
+        <div ref={sectionRef} className='w-11/12 mx-auto  mt-10 mb-10 flex flex-col md:flex-row items-center justify-center'>
             {/* section-1 */}
             <section className='w-full md:w-6/12 flex flex-col items-center text-center md:text-left'>
                 <div className='space-y-5 w-full md:w-10/12'>
@@ -23,49 +44,49 @@ const ChooseUs = () => {
 
                 <div className='grid grid-cols-1 md:grid-cols-2 w-full md:w-4/5 gap-5 mt-6'>
                     {/* card-one */}
-                    <div className='flex items-center gap-3 transition-transform duration-300 hover:-translate-y-3'>
-                        <span className='text-6xl text-green-500 hover:animate-spin duration-1000'>
+                    <div className='flex items-center gap-3 transition-transform duration-200 hover:-translate-y-2'>
+                        <span className='text-6xl text-green-500'>
                             <FaGraduationCap />
                         </span>
                         <div className='font-bold'>
                             <h2 className='text-green-500 font-bold text-4xl'>
-                                <CountUp start={1} end={15} duration={3} />
+                                {animate ? <CountUp start={0} end={15} duration={1.2} /> : '0'}
                             </h2>
                             <h2 className='text-2xl'>Awards</h2>
                         </div>
                     </div>
                     {/* card-two */}
-                    <div className='flex items-center gap-3 transition-transform duration-300 hover:-translate-y-3'>
-                        <span className='text-6xl text-green-500 hover:animate-spin duration-1000'>
+                    <div className='flex items-center gap-3 transition-transform duration-200 hover:-translate-y-2'>
+                        <span className='text-6xl text-green-500'>
                             <BsBagCheckFill />
                         </span>
                         <div className='font-bold'>
                             <h2 className='text-green-500 font-bold text-4xl'>
-                                <CountUp start={1} end={30} duration={3} />+
+                                {animate ? <CountUp start={0} end={30} duration={1.2} /> : '0'}+
                             </h2>
                             <h2 className='text-2xl'>Certified Teachers</h2>
                         </div>
                     </div>
                     {/* card-three */}
-                    <div className='flex items-center gap-3 transition-transform duration-300 hover:-translate-y-3'>
-                        <span className='text-6xl text-green-500 hover:animate-spin duration-1000'>
+                    <div className='flex items-center gap-3 transition-transform duration-200 hover:-translate-y-2'>
+                        <span className='text-6xl text-green-500'>
                             <FaRegBuilding />
                         </span>
                         <div className='font-bold'>
                             <h2 className='text-green-500 font-bold text-4xl'>
-                                <CountUp start={1} end={10} duration={3} />
+                                {animate ? <CountUp start={0} end={10} duration={1.2} /> : '0'}
                             </h2>
                             <h2 className='text-2xl'>Featured Programs</h2>
                         </div>
                     </div>
                     {/* card-four */}
-                    <div className='flex items-center gap-3 transition-transform duration-300 hover:-translate-y-3'>
-                        <span className='text-6xl text-green-500 hover:animate-spin duration-1000'>
+                    <div className='flex items-center gap-3 transition-transform duration-200 hover:-translate-y-2'>
+                        <span className='text-6xl text-green-500'>
                             <MdPeopleAlt />
                         </span>
                         <div className='font-bold'>
                             <h2 className='text-green-500 font-bold text-4xl'>
-                                <CountUp start={1} end={600} duration={3} />
+                                {animate ? <CountUp start={0} end={600} duration={1.2} /> : '0'}
                             </h2>
                             <h2 className='text-2xl'>Students</h2>
                         </div>
@@ -75,7 +96,13 @@ const ChooseUs = () => {
 
             {/* section-2 */}
             <section className='w-full md:w-6/12 flex justify-center mt-10 md:mt-0'>
-                <img className='w-full max-w-[700px] rounded-lg shadow-lg' src={groupImg} alt="Business Meeting" />
+                <img
+                    className='w-full max-w-[700px] rounded-lg shadow-lg'
+                    src={groupImg}
+                    alt="Business Meeting"
+                    loading="lazy"
+                    decoding="async"
+                />
             </section>
         </div>
     );
